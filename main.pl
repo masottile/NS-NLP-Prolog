@@ -14,8 +14,26 @@ geography(plains, normal, normal, normal).
 %   and preferred temperature and rain levels.
 species(wolf, 0.65, 0.35, cold, normal).
 species(rabbit, 0.5, 0.75, normal, normal).
-species(tortise, 0.9, 0.25, hot, dry).
+species(tortoise, 0.9, 0.25, hot, dry).
+species(bear, 0.8, 0.30, cold, humid).
 
+%  The Database of Facts to be Queried
+
+% carnivorous(A) is true if A is a carnivore
+carnivorous(wolf).
+
+% omnivorous(A) is true if A is a omnivore
+omnivorous(bear).
+
+% herbivorous(A) is true if A is a herbivore
+herbivorous(rabbit).
+herbivorous(tortoise).
+
+% eats(A,B) is true if A eats B
+eats(wolf,rabbit).
+eats(bear,rabbit).
+eats(bear,tortoise).
+eats(bear,wolf).
 
 % SURVIVAL AND REPRODUCTION PROBABILITY CALCULATIONS ---------------------
 % Increase of decrease the survival and reproduction probabilities
