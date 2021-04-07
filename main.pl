@@ -165,3 +165,21 @@ onedaypopulation(population(Species, N), environment(LP, Location), population(S
 %   => both of these give the rabbit the same chance of survival. On average the rabbit population will slightly increase
 % onedaypopulation(population(wolf,10), environment([population(tortise, 1)], desert), POP).
 %   => on average will slightly decrease the wolf population
+
+% HIGHEST LEVEL FUNCTION -------------------------------------------------
+
+% Reminder about data structures:
+
+% population(Species, N) 
+%   is a data structure that says there are N individuals of Species
+
+% environment(LP, Location)
+%   is a data structure contianing a list of all the populations LP that live in the given Location
+
+% ns([Environment1I, Environment2I | RI], D, [Environment1F, Environment2F | RF])
+%   Given a list of nearby environments (essentially a geographical map of some made up area and 
+%   information about all of the species and populations living there), runs a natural selection
+%   simulation over D days and returns a list of environments that describe the final state of that map.
+ns([],_,[]).
+ns(LE,0,LE).
+% ns([EI|RI], D, [EF|RF])

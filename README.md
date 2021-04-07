@@ -15,3 +15,8 @@ A natural selection simulation type program for prolog. Users query the program 
 # Development Notes
 - When writing the code try to add a comment on what the code is doing
 - When pushing up the code into main branch, write the code in a separate branch and create a pull request instead (For possible code review before merge)
+
+# TODO
+- Finish main NS algorithm to take a list of initial environments, a number of days, and return the final list of environments 
+- Update the interaction function
+- Look into setting up NLP queries to run the NS simulation
