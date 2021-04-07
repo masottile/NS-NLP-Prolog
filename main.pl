@@ -71,37 +71,46 @@ survival(Species, Location, APS, APR) :-
 %   based on the presence of other populations LP to get the adjusted survival and
 %   reproduction probabilities APS and APR
 interaction(_, [], PS, PR, PS, PR).
-interaction(population(rabbit,NR), [population(wolf, NW)|T], PS, PR, APS, APR) :- 
-    APS1 is PS*NR/(NR+NW),
-    interaction(population(rabbit,NR), T, APS1, PR, APS, APR).
-interaction(population(wolf,NW), [population(rabbit, NR)|T], PS, PR, APS, APR) :- 
-    APS1 is PS*(2-NW/(NR+NW)),
-    interaction(population(wolf,NW), T, APS1, PR, APS, APR).
+% S2 eats S1, but S1 does not eat S2
+interaction(population(S1,N1), [population(S2,N2)|T], PS, PR, APS, APR) :- 
+    eats(S2,S1),
+    not(eats(S1,S2)),
+    APS1 is PS*N1/(N1+N2),
+    interaction(population(S1,N1), T, APS1, PR, APS, APR).
+% S1 eats S2, but S2 doesn't eat S1
+interaction(population(S1,N1), [population(S2,N2)|T], PS, PR, APS, APR) :- 
+    eats(S1,S2),
+    not(eats(S2,S1)),
+    APS1 is PS*(2-N1/(N2+N1)),
+    interaction(population(S1,N1), T, APS1, PR, APS, APR).
+% S1 eats S2 and S2 eats S1
+interaction(population(S1,N1), [population(S2,N2)|T], PS, PR, APS, APR) :- 
+    eats(S1,S2),
+    eats(S2,S1),
+    APS1 is PS*(2-N1/(N2+N1))*N1/(N1+N2),
+    interaction(population(S1,N1), T, APS1, PR, APS, APR).
+% S1 does not eat S2 and S2 does not eat S1
+interaction(population(S1,N1), [population(S2,_)|T], PS, PR, APS, APR) :- 
+    not(eats(S1,S2)),
+    not(eats(S2,S1)),
+    interaction(population(S1,N1), T, PS, PR, APS, APR).
 
-interaction(population(rabbit,N), [population(S,_)|T], PS, PR, APS, APR) :- 
-    dif(S, wolf),
-    interaction(population(rabbit,N), T, PS, PR, APS, APR).
-interaction(population(wolf,N), [population(S,_)|T], PS, PR, APS, APR) :- 
-    dif(S, rabbit),
-    interaction(population(wolf,N), T, PS, PR, APS, APR).
-interaction(population(S1,N), [_|T], PS, PR, APS, APR) :- 
-    dif(S1, rabbit),
-    dif(S1, wolf),
-    interaction(population(S1,N), T, PS, PR, APS, APR).
 % interaction(population(rabbit,10), [population(wolf, 1)], 0.5, 0.5, APS, APR).
 %   => APS = 0.454545, APR = 0.5
-% interaction(population(rabbit,10), [population(wolf, 1), population(rabbit,10), population(tortise, 1)], 0.5, 0.5, APS, APR).
+% interaction(population(rabbit,10), [population(wolf, 1), population(rabbit,10), population(tortoise, 1)], 0.5, 0.5, APS, APR).
 %   => APS = 0.454545, APR = 0.5
-% interaction(population(tortise,10), [population(wolf, 1), population(tortise, 1)], 0.5, 0.5, APS, APR).
+% interaction(population(tortoise,10), [population(wolf, 1), population(tortoise, 1)], 0.5, 0.5, APS, APR).
 %   => APS = 0.5, APR = 0.5
-% interaction(population(rabbit,10), [population(tortise, 1)], 0.5, 0.5, APS, APR).
+% interaction(population(rabbit,10), [population(tortoise, 1)], 0.5, 0.5, APS, APR).
 %   => APS = 0.5, APR = 0.5
-% interaction(population(wolf,10), [population(tortise, 1)], 0.5, 0.5, APS, APR).
+% interaction(population(wolf,10), [population(tortoise, 1)], 0.5, 0.5, APS, APR).
 %   => APS = 0.5, APR = 0.5
 % interaction(population(wolf,10), [population(rabbit, 1)], 0.5, 0.5, APS, APR).
 %   => APS = 0.5454545, APR = 0.5
-% interaction(population(wolf,10), [population(tortise, 1), population(rabbit, 20)], 0.5, 0.5, APS, APR).
+% interaction(population(wolf,10), [population(tortoise, 1), population(rabbit, 20)], 0.5, 0.5, APS, APR).
 %   => APS = 0.8333, APR = 0.5
+% interaction(population(wolf,10), [population(bear, 1), population(rabbit, 20)], 0.5, 0.5, APS, APR).
+%   => APS = 0.757575, APR = 0.5
 
 
 % RUNNING A NATURAL SELECTION SIMULATION ---------------------------------
@@ -161,9 +170,9 @@ onedaypopulation(population(Species, N), environment(LP, Location), population(S
     onedaychange(APS, APR, Survives, Reproduces, N, F).
 
 % onedaypopulation(population(rabbit,10), environment([population(wolf, 1)], plains), POP).
-% onedaypopulation(population(rabbit,10), environment([population(wolf, 1), population(rabbit,10), population(tortise, 1)], plains), POP).
+% onedaypopulation(population(rabbit,10), environment([population(wolf, 1), population(rabbit,10), population(tortoise, 1)], plains), POP).
 %   => both of these give the rabbit the same chance of survival. On average the rabbit population will slightly increase
-% onedaypopulation(population(wolf,10), environment([population(tortise, 1)], desert), POP).
+% onedaypopulation(population(wolf,10), environment([population(tortoise, 1)], desert), POP).
 %   => on average will slightly decrease the wolf population
 
 % HIGHEST LEVEL FUNCTION -------------------------------------------------
