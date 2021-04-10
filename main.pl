@@ -175,6 +175,52 @@ onedaypopulation(population(Species, N), environment(LP, Location), population(S
 % onedaypopulation(population(wolf,10), environment([population(tortoise, 1)], desert), POP).
 %   => on average will slightly decrease the wolf population
 
+
+% onedaylistpopulation(LP, environment(LP, Location), FLP)
+%   takes in a list of population from an environment, the environment itself
+%   FLP is the list of population after one day
+onedaylistpopulation([], _, []).
+onedaylistpopulation([P0 | T0], Env, [P1 | T1]) :-
+    onedaypopulation(P0, Env, P1),
+    onedaylistpopulation(T0, Env, T1).
+% onedaylistpopulation([population(wolf, 1), population(rabbit,10), population(tortoise, 1)], environment([population(wolf, 1), population(rabbit,10), population(tortoise, 1)], plains), X).
+% => should return sth similar to onedaypopulation but as a list
+
+
+% removeextinct(LP0, LP1)
+%   LP0 is a list of population
+%   LP1 is LP0 with all population with N = 0 removed 
+removeextinct([], []).
+removeextinct([population(_, 0) | T], FL) :- removeextinct(T, FL).
+removeextinct([population(S, N) | T], [population(S, N) | FT]) :-
+    N > 0,
+    removeextinct(T, FT).
+% removeextinct([population(wolf, 2), population(rabbit,0), population(tortoise, 1)], X).
+% => should return X = [population(wolf, 2), population(tortoise, 1)].
+% removeextinct([population(wolf, 2), population(rabbit,1), population(tortoise, 1)], X).
+% => should return X = [population(wolf, 2), population(rabbit,1), population(tortoise, 1)].
+
+
+% onedayenvironment(E0, E1)
+% => E0 is an environment
+% => E1 is E0 after one day and with all extinct species removed
+onedayenvironment(environment(LP0, Location), environment(LP1, Location)) :- 
+    onedaylistpopulation(LP0, environment(LP0, Location), LPC),
+    removeextinct(LPC, LP1).
+% onedayenvironment(environment([population(wolf, 1), population(rabbit,10), population(tortoise, 1)], plains), X).
+
+
+% onedayallenvironments(LE0, LE1)
+% => LE0 is a list of environments
+% => LE1 is LE0 after one day and with all extinct species removed
+onedayallenvironments([], []).
+onedayallenvironments([E0 | T0], [E1 | T1]) :-
+    onedayenvironment(E0, E1),
+    onedayallenvironments(T0, T1).
+%onedayallenvironments([environment([population(wolf, 1), population(rabbit,10), population(tortoise, 1)], plains), environment([population(bear, 3), population(rabbit,20)], jungle)], X).
+
+
+
 % HIGHEST LEVEL FUNCTION -------------------------------------------------
 
 % Reminder about data structures:
@@ -191,4 +237,9 @@ onedaypopulation(population(Species, N), environment(LP, Location), population(S
 %   simulation over D days and returns a list of environments that describe the final state of that map.
 ns([],_,[]).
 ns(LE,0,LE).
-% ns([EI|RI], D, [EF|RF])
+ns(ELI, D, ELF) :-
+    D > 0,
+    onedayallenvironments(ELI, ELN),
+    DN is D-1,
+    ns(ELN, DN, ELF). 
+% ns([environment([population(wolf, 1), population(rabbit,10), population(tortoise, 1)], plains), environment([population(bear, 3), population(rabbit,20)], jungle)], 10, X).
