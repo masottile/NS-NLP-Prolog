@@ -7,7 +7,7 @@
 %   and food availability (plentiful, normal, scarce) of each biome.
 geography(desert, hot, dry, scarce).
 geography(jungle, hot, humid, plentiful).
-geography(plains, normal, normal, normal).
+geography(plain, normal, normal, normal).
 
 % species(Species, PS, PR, Temp, Rain)
 %   gives the base survival probability PS, reproduction probability PR,
@@ -169,8 +169,8 @@ onedaypopulation(population(Species, N), environment(LP, Location), population(S
     flag(APS, APR, S_float, R_float, Survives, Reproduces),
     onedaychange(APS, APR, Survives, Reproduces, N, F).
 
-% onedaypopulation(population(rabbit,10), environment([population(wolf, 1)], plains), POP).
-% onedaypopulation(population(rabbit,10), environment([population(wolf, 1), population(rabbit,10), population(tortoise, 1)], plains), POP).
+% onedaypopulation(population(rabbit,10), environment([population(wolf, 1)], plain), POP).
+% onedaypopulation(population(rabbit,10), environment([population(wolf, 1), population(rabbit,10), population(tortoise, 1)], plain), POP).
 %   => both of these give the rabbit the same chance of survival. On average the rabbit population will slightly increase
 % onedaypopulation(population(wolf,10), environment([population(tortoise, 1)], desert), POP).
 %   => on average will slightly decrease the wolf population
@@ -242,4 +242,4 @@ ns(ELI, D, ELF) :-
     onedayallenvironments(ELI, ELN),
     DN is D-1,
     ns(ELN, DN, ELF). 
-% ns([environment([population(wolf, 1), population(rabbit,10), population(tortoise, 1)], plains), environment([population(bear, 3), population(rabbit,20)], jungle)], 10, X).
+% ns([environment([population(wolf, 1), population(rabbit,10), population(tortoise, 1)], plain), environment([population(bear, 3), population(rabbit,20)], jungle)], 10, X).
