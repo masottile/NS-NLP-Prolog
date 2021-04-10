@@ -1,5 +1,7 @@
 :- [model].
 
+% Code structure based off of geographyq.pl in class
+
 % A noun phrase is a determiner followed by adjectives followed
 % by a noun followed by an optional modifying phrase:
 noun_phrase(L0,L4,Entity,C0,C4) :-
