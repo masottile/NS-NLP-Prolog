@@ -243,3 +243,6 @@ ns(ELI, D, ELF) :-
     DN is D-1,
     ns(ELN, DN, ELF). 
 % ns([environment([population(wolf, 1), population(rabbit,10), population(tortoise, 1)], plain), environment([population(bear, 3), population(rabbit,20)], jungle)], 10, X).
+% ns([environment([population(rabbit, 10), population(wolf, 1)], plain), environment([population(rabbit, 20), population(wolf, 1)], plain), environment([population(rabbit, 30), population(wolf, 1)], plain)], 10, X).
+% ns([environment([population(bear, 4)], desert), environment([population(bear, 4)], jungle), environment([population(bear, 4)], plain)], 10, X).
+% ns([environment([population(tortoise, 4)], desert), environment([population(tortoise, 4)], jungle), environment([population(tortoise, 4)], plain)], 10, X).
